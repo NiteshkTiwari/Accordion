@@ -16,28 +16,38 @@ const faqs = [
 ];
 
 function App() {
+  const [active, setActive] = useState(null);
   return (
     <div>
       <div className="accordion">
         {faqs.map((el, i) => (
-          <Card title={el.title} text={el.text} num={i} key={el.title} />
+          <Card
+            title={el.title}
+            text={el.text}
+            num={i}
+            active={active}
+            setActive={setActive}
+            key={el.title}
+          />
         ))}
       </div>
     </div>
   );
 }
 
-function Card({ title, text, num }) {
-  const [active, setActive] = useState(false);
+function Card({ title, text, num, active, setActive }) {
+  const isOpen = active === num;
+
+  function handleToggle() {
+    setActive(isOpen ? null : num);
+  }
+
   return (
-    <div
-      className={`item ${active ? "open" : ""}`}
-      onClick={() => setActive((c) => !c)}
-    >
+    <div className={`item ${isOpen ? "open" : ""}`} onClick={handleToggle}>
       <p className="number">{num}</p>
       <p className="title">{title}</p>
-      <p className="icon">{active ? "-" : "+"}</p>
-      {active ? <div className="content-box">{text}</div> : null}
+      <p className="icon">{isOpen ? "-" : "+"}</p>
+      {isOpen ? <div className="content-box">{text}</div> : null}
     </div>
   );
 }
